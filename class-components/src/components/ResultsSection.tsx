@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-interface Props {}
+type Props = Record<string, never>;
 
 export class ResultsSection extends Component<Props> {
   render() {
