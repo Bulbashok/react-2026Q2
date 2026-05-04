@@ -41,6 +41,6 @@ export function fetchItems(query?: string): Promise<SearchResult[]> {
             i.description.toLowerCase().includes(lower)
         )
       );
-    }, 400);
+    }, 1000);
   });
 }

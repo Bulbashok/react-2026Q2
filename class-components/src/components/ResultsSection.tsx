@@ -3,11 +3,21 @@ import type { SearchResult } from '../types/types';
 
 interface Props {
   results: SearchResult[];
+  isLoading: boolean;
 }
 
 export class ResultsSection extends Component<Props> {
   render() {
-    const { results } = this.props;
+    const { results, isLoading } = this.props;
+
+    if (isLoading) {
+      return (
+        <section className="results-section">
+          <h2>Results</h2>
+          <div className="spinner" />
+        </section>
+      );
+    }
 
     return (
       <section className="results-section">

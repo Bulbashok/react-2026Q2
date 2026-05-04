@@ -7,12 +7,13 @@ import { fetchItems } from './api/api';
 
 interface AppState {
   results: SearchResult[];
+  isLoading: boolean;
 }
 
 type Props = Record<string, never>;
 
 class App extends Component<Props, AppState> {
-  state: AppState = { results: [] };
+  state: AppState = { results: [], isLoading: false };
 
   componentDidMount(): void {
     const saved = localStorage.getItem('lastSearchQuery') ?? '';
@@ -20,8 +21,9 @@ class App extends Component<Props, AppState> {
   }
 
   fetchResults = async (query: string) => {
+    this.setState({ isLoading: true });
     const data = await fetchItems(query || undefined);
-    this.setState({ results: data });
+    this.setState({ results: data, isLoading: false });
   };
 
   handleSearch = (rawQuery: string) => {
@@ -39,7 +41,10 @@ class App extends Component<Props, AppState> {
     return (
       <div id="center">
         <SearchSection onSearch={this.handleSearch} />
-        <ResultsSection results={this.state.results} />
+        <ResultsSection
+          results={this.state.results}
+          isLoading={this.state.isLoading}
+        />
       </div>
     );
   }
