@@ -1,6 +1,8 @@
 import { Component } from 'react';
 
-type Props = Record<string, never>;
+interface Props {
+  onSearch: (query: string) => void;
+}
 
 interface State {
   query: string;
@@ -22,18 +24,26 @@ export class SearchSection extends Component<Props, State> {
     localStorage.setItem('lastSearchQuery', value);
   };
 
+  handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    this.props.onSearch(this.state.query);
+  };
+
   render() {
     return (
-      <section className="search-section">
+      <form className="search-section" onSubmit={this.handleSubmit}>
         <h2>Search</h2>
         <input
           className="search-input"
           type="text"
           value={this.state.query}
           onChange={this.handleChange}
-          placeholder="Start typing..."
+          placeholder="Введите запрос..."
         />
-      </section>
+        <button type="submit" className="search-btn">
+          Find
+        </button>
+      </form>
     );
   }
 }
