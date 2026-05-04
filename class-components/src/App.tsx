@@ -3,6 +3,7 @@ import './App.css';
 import { ResultsSection } from './components/ResultsSection';
 import { SearchSection } from './components/SearchSection';
 import type { SearchResult } from './types/types';
+import { fetchItems } from './api/api';
 
 interface AppState {
   results: SearchResult[];
@@ -13,27 +14,18 @@ type Props = Record<string, never>;
 class App extends Component<Props, AppState> {
   state: AppState = { results: [] };
 
+  componentDidMount(): void {
+    const savedQuery = localStorage.getItem('lasrSearchQuery') || undefined;
+    this.loadData(savedQuery);
+  }
+
+  loadData = async (query?: string) => {
+    const data = await fetchItems(query);
+    this.setState({ results: data });
+  };
+
   handleSearch = (query: string) => {
-    const mock: SearchResult[] = query
-      ? [
-          {
-            id: 1,
-            name: `Item "${query}" #1`,
-            description: 'First item description.',
-          },
-          {
-            id: 2,
-            name: `Item "${query}" #2`,
-            description: 'Second item description.',
-          },
-          {
-            id: 3,
-            name: `Item "${query}" #3`,
-            description: 'Third item description.',
-          },
-        ]
-      : [];
-    this.setState({ results: mock });
+    this.loadData(query || undefined);
   };
 
   render() {
