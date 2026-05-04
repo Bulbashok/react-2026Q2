@@ -7,25 +7,32 @@ import { fetchItems } from './api/api';
 
 interface AppState {
   results: SearchResult[];
+  lastSearchedQuery: string | null;
 }
 
 type Props = Record<string, never>;
 
 class App extends Component<Props, AppState> {
-  state: AppState = { results: [] };
+  state: AppState = { results: [], lastSearchedQuery: null };
 
   componentDidMount(): void {
-    const savedQuery = localStorage.getItem('lasrSearchQuery') || undefined;
-    this.loadData(savedQuery);
+    const saved = localStorage.getItem('lastSearchQuery') ?? '';
+    this.loadData(saved);
   }
 
-  loadData = async (query?: string) => {
-    const data = await fetchItems(query);
-    this.setState({ results: data });
+  loadData = async (rawQuery: string) => {
+    const query = rawQuery.trim();
+
+    if (query === this.state.lastSearchedQuery) {
+      return;
+    }
+
+    const data = await fetchItems(query || undefined);
+    this.setState({ results: data, lastSearchedQuery: query });
   };
 
-  handleSearch = (query: string) => {
-    this.loadData(query || undefined);
+  handleSearch = (rawQuery: string) => {
+    this.loadData(rawQuery);
   };
 
   render() {
