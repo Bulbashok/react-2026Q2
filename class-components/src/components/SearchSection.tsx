@@ -19,12 +19,10 @@ export class SearchSection extends Component<Props, State> {
   }
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    this.setState({ query: value });
-    localStorage.setItem('lastSearchQuery', value);
+    this.setState({ query: e.target.value });
   };
 
-  handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.onSearch(this.state.query);
   };
