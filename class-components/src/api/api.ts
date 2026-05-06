@@ -1,46 +1,36 @@
 import type { SearchResult } from '../types/types';
 
-const ALL_ITEMS: SearchResult[] = [
-  {
-    id: 1,
-    name: 'React Hooks Guide',
-    description: 'Comprehensive guide to modern React state management.',
-  },
-  {
-    id: 2,
-    name: 'TypeScript Basics',
-    description: 'Learn types, interfaces, and generics from scratch.',
-  },
-  {
-    id: 3,
-    name: 'CSS Flexbox',
-    description: 'Master layout design with flexbox properties.',
-  },
-  {
-    id: 4,
-    name: 'Node.js REST API',
-    description: 'Building scalable backend services with Express.',
-  },
-  {
-    id: 5,
-    name: 'Git Workflow',
-    description: 'Branching strategies and pull request best practices.',
-  },
-];
+export interface ApiCharacter {
+  id: number;
+  name: string;
+  species: string;
+  image: string;
+  status: string;
+}
 
-export function fetchItems(query?: string): Promise<SearchResult[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (!query) return resolve(ALL_ITEMS);
-
-      const lower = query.toLowerCase();
-      resolve(
-        ALL_ITEMS.filter(
-          (i) =>
-            i.name.toLowerCase().includes(lower) ||
-            i.description.toLowerCase().includes(lower)
-        )
-      );
-    }, 1000);
+export async function fetchItems(
+  query?: string,
+  page: number = 1
+): Promise<SearchResult[]> {
+  const params = new URLSearchParams({
+    page: String(page),
+    ...(query?.trim() ? { name: query.trim() } : {}),
   });
+
+  const res = await fetch(
+    `https://rickandmortyapi.com/api/character/?${params}`
+  );
+
+  if (!res.ok) {
+    throw new Error(`Server Error: ${res.status}`);
+  }
+
+  const data: { results: ApiCharacter[] | null } = await res.json();
+
+  return (data.results || []).map((char) => ({
+    id: char.id,
+    name: char.name,
+    description: `${char.species}`,
+    image: char.image,
+  }));
 }

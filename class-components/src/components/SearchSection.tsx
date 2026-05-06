@@ -36,7 +36,7 @@ export class SearchSection extends Component<Props, State> {
           type="text"
           value={this.state.query}
           onChange={this.handleChange}
-          placeholder="Введите запрос..."
+          placeholder="Enter your query..."
         />
         <button type="submit" className="search-btn">
           Find

@@ -66,8 +66,8 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
@@ -87,6 +87,15 @@
   color: #64748b;
   line-height: 1.5;
 }
+
+.result-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
 .empty-state {
   color: #94a3b8;
   text-align: center;
@@ -103,6 +112,17 @@
   animation: spin 0.8s linear infinite;
 }
 
+.error-message {
+  padding: 16px;
+  margin-top: 16px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -113,5 +133,11 @@
   #center {
     padding: 32px 20px 24px;
     gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .results-list {
+    grid-template-columns: 1fr;
   }
 }
