@@ -21,6 +21,10 @@ export async function fetchItems(
     `https://rickandmortyapi.com/api/character/?${params}`
   );
 
+  if (res.status === 404 && query?.trim()) {
+    return [];
+  }
+
   if (!res.ok) {
     throw new Error(`Server Error: ${res.status}`);
   }
